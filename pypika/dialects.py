@@ -85,6 +85,7 @@ class MySQLQuery(Query):
 class MySQLQueryBuilder(QueryBuilder):
     QUOTE_CHAR = "`"
     QUERY_CLS = MySQLQuery
+    AUTO_INCREMENT = "AUTO_INCREMENT"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(dialect=Dialects.MYSQL, wrap_set_operation_queries=False, **kwargs)
@@ -384,6 +385,7 @@ class PostgreSQLQuery(Query):
 class PostgreSQLQueryBuilder(QueryBuilder):
     ALIAS_QUOTE_CHAR = '"'
     QUERY_CLS = PostgreSQLQuery
+    AUTO_INCREMENT = "SERIAL"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(dialect=Dialects.POSTGRESQL, **kwargs)
