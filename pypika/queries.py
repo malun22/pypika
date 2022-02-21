@@ -276,11 +276,13 @@ class Column:
         column_type: Optional[str] = None,
         nullable: Optional[bool] = None,
         default: Optional[Union[Any, Term]] = None,
+        additional: Optional[str] = None,
     ) -> None:
         self.name = column_name
         self.type = column_type
         self.nullable = nullable
         self.default = default if default is None or isinstance(default, Term) else ValueWrapper(default)
+        self.additional = additional
 
     def get_name_sql(self, **kwargs: Any) -> str:
         quote_char = kwargs.get("quote_char")
@@ -292,11 +294,12 @@ class Column:
         return column_sql
 
     def get_sql(self, **kwargs: Any) -> str:
-        column_sql = "{name}{type}{nullable}{default}".format(
+        column_sql = "{name}{type}{nullable}{default}{additional}".format(
             name=self.get_name_sql(**kwargs),
             type=" {}".format(self.type) if self.type else "",
             nullable=" {}".format("NULL" if self.nullable else "NOT NULL") if self.nullable is not None else "",
             default=" {}".format("DEFAULT " + self.default.get_sql(**kwargs)) if self.default else "",
+            additional=" {}".format(self.additional if self.additional else ""),
         )
 
         return column_sql
